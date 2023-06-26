@@ -1,33 +1,31 @@
 /* eslint-disable */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import axios from "axios";
 
-import { useDispatch, useSelector } from "react-redux";
-import { Helmet } from "react-helmet";
-import {
-  Row,
-  Col,
-  Image,
-  ListGroup,
-  Card,
-  Form,
-  Button,
-} from "react-bootstrap";
-import NumberFormat from "react-number-format";
-import TablaProducts from "../components/TablaProducts";
-
+  
 const DetailProduct = ({ history, match }) => {
   const productId = match.params.id;
   console.log(productId);
   // fetchData(orderId);
-  const [arrList, setarrList] = useState([]);
-  const [items, setItems] = useState([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
+  const [price, setPrice] = useState(0);
   const [category, setCategory] = useState("");
   const [brand, setBrand] = useState("");
-  const [quantity, setQuantity] = useState("");
+  const [quantity, setQuantity] = useState(0);
+  const [image, setImagen] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
+  const fileInputRef = useRef(null);
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setSelectedFile(file);
+  };
+  const handleResetFileInput = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.value = null;
+    }
+  };
 
   const URL =
     "https://zpje4svosl.execute-api.us-east-1.amazonaws.com/dev/products";
@@ -35,18 +33,22 @@ const DetailProduct = ({ history, match }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+
+    if(price<0){
+      alert("los valores deben ser mayores a 1 PEN")
+      return;
+    }
+    if(quantity<0){
+      alert("los valores deben ser mayores a 1 unidad")
+      return;
+    }
     // Validar los campos del formulario
-    if (
-      !name ||
-      !description ||
-      !price ||
-      !category ||
-      !brand ||
-      !quantity
-    ) {
+    if (!name || !description ||  !(price>0)  || !category || !brand || !(quantity>0)) {
       alert("Por favor, completa todos los campos");
       return;
     }
+
+
 
     // Crear un nuevo objeto con los datos del formulario
     const nuevoItem = {
@@ -55,8 +57,17 @@ const DetailProduct = ({ history, match }) => {
       price,
       category,
       brand,
-      quantity
+      quantity,
+      image,
     };
+
+
+    if (selectedFile) {
+      // Perform API operations with the selected file
+      console.log('File selected:', selectedFile);
+    } else {
+      console.log('No file selected');
+    }
 
     // Agregar el nuevo item usando la función pasada como prop
     editarItem(nuevoItem);
@@ -68,6 +79,8 @@ const DetailProduct = ({ history, match }) => {
     setCategory("");
     setBrand("");
     setDescription("");
+    setImagen("");
+
   };
 
   useEffect(() => {
@@ -75,12 +88,14 @@ const DetailProduct = ({ history, match }) => {
       try {
         const response = await axios.get(`${URL}/${productId}`);
         console.log(response);
-        setName(response.data.body.name);
-        setDescription(response.data.body.description);
-        setPrice(response.data.body.price);
-        setCategory(response.data.body.category);
-        setBrand(response.data.body.brand);
-        setQuantity(response.data.body.quantity);
+        setName(response.data.product.name);
+        setDescription(response.data.product.description);
+        setPrice(response.data.product.price);
+        setCategory(response.data.product.category);
+        setBrand(response.data.product.brand);
+        setQuantity(response.data.product.quantity);
+        // setImagen(response.data.product.image);
+        // fileInputRef.current.value=response.data.product.image;
       } catch (error) {
         console.error(error);
       }
@@ -91,12 +106,12 @@ const DetailProduct = ({ history, match }) => {
   const editarItem = async (nuevoItem) => {
     // arrList.push(obj);
     try {
-      let sUrl = URL+ `/${productId}`;
-      // const response = await axios('/api/items'); // Use the relative path to your API endpoint
+      nuevoItem.image="https://cdn.shopify.com/s/files/1/0632/7880/9324/products/IMG-7325616.jpg?v=1663002895"
+      let sUrl = URL + `/${productId}`;
       const response = await axios.patch(sUrl, nuevoItem); // Use the relative path to your API endpoint
       const data = await response;
-      alert(data.data.body);
-      history.push('/admin/products')
+      alert(data.data.message);
+      history.push("/admin/products");
     } catch (error) {
       console.error(error);
     }
@@ -171,9 +186,21 @@ const DetailProduct = ({ history, match }) => {
           value={quantity}
           onChange={(e) => setQuantity(e.target.value)}
         />
+        <label className="label1" htmlFor="cantidad">
+          Imagen:
+        </label>
+        <input
+          className="input1"
+          type="file"
+          id="image"
+          // value={fileInputRef}
+          value={image}
+          // ref={fileInputRef}
+          onChange={(e) => setImagen(e.target.value)}
+        />
 
         <button className="button1" type="submit">
-          Editar
+          Editar producto
         </button>
       </form>
       {/* <div className="container d-flex justify-center mt-2">

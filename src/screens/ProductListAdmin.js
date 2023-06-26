@@ -1,9 +1,6 @@
 /* eslint-disable */
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
-
-import { useDispatch, useSelector } from "react-redux";
-import { Helmet } from "react-helmet";
 import {
   Row,
   Col,
@@ -13,31 +10,20 @@ import {
   Form,
   Button,
 } from "react-bootstrap";
-import NumberFormat from "react-number-format";
 import TablaProducts from "../components/TablaProducts";
-import AddToCartBtn from "../components/AddToCartBtn";
-import {
-  listProductDetails,
-  createProductReview,
-} from "../actions/productActions";
-import { PRODUCT_CREATE_REVIEW_RESET } from "../constants/productConstants";
-import Spinner from "../components/layout/Spinner";
-import Message from "../components/Message";
 
 const ProductScreen = ({ history, match }) => {
-  const [arrList, setarrList] = useState([]);
+  // const [arrList, setarrList] = useState([]);
   const [items, setItems] = useState([]);
   const [nombre, setNombre] = useState("");
   const [descripcion, setDescripcion] = useState("");
-  const [precio, setPrecio] = useState("");
+  const [precio, setPrecio] = useState(0);
   const [categoria, setCategoria] = useState("");
   const [brand, setBrand] = useState("");
-  const [cantidad, setCantidad] = useState("");
+  const [cantidad, setCantidad] = useState(0);
+  const [imagen, setImagen] = useState("");
  
   const URL ="https://zpje4svosl.execute-api.us-east-1.amazonaws.com/dev/products"
-
- 
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -45,10 +31,11 @@ const ProductScreen = ({ history, match }) => {
     if (
       !nombre ||
       !descripcion ||
-      !precio ||
+      !(precio>0) ||
       !categoria ||
       !brand ||
-      !cantidad
+      !(cantidad>0) ||
+      !imagen
     ) {
       alert("Por favor, completa todos los campos");
       return;
@@ -62,6 +49,7 @@ const ProductScreen = ({ history, match }) => {
       category: categoria,
       brand,
       quantity: cantidad,
+      image: imagen,
     };
 
     // Agregar el nuevo item usando la función pasada como prop
@@ -70,19 +58,18 @@ const ProductScreen = ({ history, match }) => {
     // Limpiar los campos del formulario
     setNombre("");
     setDescripcion("");
-    setPrecio("");
+    setPrecio(0);
     setCategoria("");
     setBrand("");
-    setCantidad("");
+    setCantidad(0);
+    setImagen("");
   };
   const fetchData = async () => {
     try {
 
-      // const response = await axios('/api/items'); // Use the relative path to your API endpoint
       const response = await axios(URL); // Use the relative path to your API endpoint
       const data = await response;
-      let arr = data.data.body;
-      console.log(data.data.body);
+      let arr = data.data.products;
       setItems(arr);
     } catch (error) {
       console.error(error);
@@ -91,18 +78,22 @@ const ProductScreen = ({ history, match }) => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  // "https://cdn.shopify.com/s/files/1/0632/7880/9324/products/IMG-7325616.jpg?v=1663002895
+
   const agregarItem = async (nuevoItem)=>{
     // arrList.push(obj);
     try {
+      nuevoItem.image = "https://cdn.shopify.com/s/files/1/0632/7880/9324/products/IMG-7325616.jpg?v=1663002895"
       // const response = await axios('/api/items'); // Use the relative path to your API endpoint
       const response = await axios.post(URL, nuevoItem); // Use the relative path to your API endpoint
       const data = await response;
-      alert(data.data.body);
-      fetchData();
+      alert(data.data.message);
+      items.push(data.data.product)
+      // fetchData();
     } catch (error) {
       console.error(error);
     }
-    console.log(arrList);
   }
   // const user =
   //   userInfo &&
@@ -111,14 +102,6 @@ const ProductScreen = ({ history, match }) => {
 
   return (
     <div>
-      {/* <Helmet>
-   
-      </Helmet>
-      <Button onClick={() => history.goBack()} className="mb-3">
-        Volver
-      </Button> */}
-        
-          {/* <Row> */}
           <h2>
             Administrador de productos
           </h2>
@@ -153,7 +136,8 @@ const ProductScreen = ({ history, match }) => {
                 type="number"
                 id="precio"
                 value={precio}
-                onChange={(e) => setPrecio(e.target.value)}
+                min="0"
+                onChange={(e) => setPrecio(+e.target.value)}
               />
 
               <label className="label1" htmlFor="categoria">
@@ -185,12 +169,23 @@ const ProductScreen = ({ history, match }) => {
                 className="input1"
                 type="number"
                 id="cantidad"
+                min="0"
                 value={cantidad}
-                onChange={(e) => setCantidad(e.target.value)}
+                onChange={(e) => setCantidad(+e.target.value)}
+              />
+              <label className="label1" htmlFor="cantidad">
+                Imagen:
+              </label>
+              <input
+                className="input1"
+                type="file"
+                id="img"
+                value={imagen}
+                onChange={(e) => setImagen(e.target.value)}
               />
 
               <button className="button1" type="submit">
-                Agregar
+                Agregar Producto
               </button>
             </form>
             <div className="container d-flex justify-center mt-2">

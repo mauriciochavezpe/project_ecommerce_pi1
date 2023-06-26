@@ -34,12 +34,8 @@ const HomeScreen = ({ match, history }) => {
     <>
       <Helmet>
         <title>Home | Grupo 3D</title>
-        <meta
-          name='description'
-          content="מחשבים, סלולר, מגוון מוצרי חשמל, גאדג'טים ועוד מגוון מוצרים! כי לקנות בזץ נותן לך זץ!"
-        />
-        <meta name='keywords' content="מחשבים, סלולר, מוצרי חשמל, גאדג'טים" />
-      </Helmet>
+         
+       </Helmet>
       {!keyword && (
         <>
           <ListGroup>
@@ -58,16 +54,17 @@ const HomeScreen = ({ match, history }) => {
       {loading ? (
         <Spinner />
       ) : error ? (
-        <Message variant='danger' dismissible={false}>
-          {error}
-        </Message>
+        <Spinner />
+        // <Message variant='danger' dismissible={false}>
+        //  pendiente de carga...
+        // </Message>
       ) : (
         <>
           {keyword && products.length > 0 && (
             <>
-              <Button onClick={() => history.goBack()}>חזרה</Button>
+              {/* <Button onClick={() => history.goBack()}>חזרה</Button> */}
 
-              <h3>תוצאות חיפוש ל"{keyword}"</h3>
+              {/* <h3>תוצאות חיפוש ל"{keyword}"</h3> */}
             </>
           )}
           <Row>
@@ -82,7 +79,6 @@ const HomeScreen = ({ match, history }) => {
             ) : (
               <>
                 <h3 className='mr-3'>
-                  לא נמצאו מוצרים.{' '}
                   <span
                     style={{ color: '#AAAAAA' }}
                     className='link'

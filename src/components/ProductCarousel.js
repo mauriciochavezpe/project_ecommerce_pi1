@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { Carousel, Image } from 'react-bootstrap'
@@ -9,9 +9,11 @@ import { listTopProducts } from '../actions/productActions'
 
 const ProductCarousel = () => {
   const dispatch = useDispatch()
-
+  const [error,setError]= useState(null)
+  const [loading,setLoading]= useState(null)
   const productTopRated = useSelector((state) => state.productTopRated)
-  const { loading, error, products } = productTopRated
+  const { count, products } = productTopRated
+  console.log(products);
 
   useEffect(() => {
     dispatch(listTopProducts())
@@ -20,9 +22,10 @@ const ProductCarousel = () => {
   return loading ? (
     <Loader />
   ) : error ? (
-    <Message variant='danger' dismissible={false}>
-      {error}
-    </Message>
+    <Loader />
+    // <Message variant='danger' dismissible={false}>
+    //   {error}
+    // </Message>
   ) : (
     <Carousel pause='hover' className='bg-dark mt-2 mx-5'>
       {products.map((product) => (
@@ -38,7 +41,6 @@ const ProductCarousel = () => {
                     displayType={'text'}
                     thousandSeparator={true}
                   />{' '}
-                  ש"ח
                 </h5>
               </>
             </Carousel.Caption>

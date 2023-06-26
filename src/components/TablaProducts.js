@@ -1,25 +1,23 @@
-import React from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom'
-
+import React from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 const TablaProducts = ({ products }) => {
-
-  const eliminarItem= async (item)=>{
+  const eliminarItem = async (item) => {
     console.log(item);
 
     try {
-      const URL ="https://zpje4svosl.execute-api.us-east-1.amazonaws.com/dev/products/"+item.id;
+      const URL =
+        "https://zpje4svosl.execute-api.us-east-1.amazonaws.com/dev/products/" +
+        item.id;
       const response = await axios.delete(URL);
       console.log(response.data); // Handle the response as needed
-      alert(response.data.body)
+      alert(response.data.message);
     } catch (error) {
       console.error(error);
     }
   };
-
- 
-  return (
+ return (
     <table>
       <thead>
         <tr>
@@ -29,6 +27,7 @@ const TablaProducts = ({ products }) => {
           <th>Categoría</th>
           <th>Marca</th>
           <th>Cantidad</th>
+          <th>Imagen</th>
           <th>Acciones</th>
         </tr>
       </thead>
@@ -41,18 +40,18 @@ const TablaProducts = ({ products }) => {
             <td>{item.category}</td>
             <td>{item.brand}</td>
             <td>{item.quantity}</td>
+            <img src={item.image} alt={item.nombre} style={{ width: '80px', height: 'auto', padding:'10px' }} />
+       
             <td>
-              <button className="button delete" onClick={() => eliminarItem(item)}>Eliminar</button>
-              <Link
-              to={`/detailProduct/${item.id}`}
-            >
-              Ver
-            </Link>
-              {/* <button  className="button ver">
-              <Link href={`/admin/${item.id}`}>
-                <a>Ver</a>
-                  </Link>
-              </button> */}
+              <button
+                className="btn btn-danger"
+                onClick={() => eliminarItem(item)}
+              >
+                Eliminar
+              </button>
+              <Link className="btn btn-info" to={`/detailProduct/${item.id}`}>
+                Ver
+              </Link>
             </td>
           </tr>
         ))}

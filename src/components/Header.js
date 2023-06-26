@@ -28,10 +28,11 @@ const Header = () => {
             <Navbar.Brand className='mr-n4'>
               <Navbar.Brand>
                 <img src={logo} alt='logo' className='logo-img' />
+                {/* <span className=''>Grupo 3D</span> */}
               </Navbar.Brand>
             </Navbar.Brand>
           </LinkContainer>
-          <Navbar.Toggle aria-controls='basic-navbar-nav' />
+          {/* <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
             <Route render={({ history }) => <SearchBox history={history} />} />
             <Nav className='mr-auto'>
@@ -55,7 +56,7 @@ const Header = () => {
                 </NavDropdown>
               )}
               {userInfo && !userInfo.isAdmin ? (
-                <NavDropdown title={`${userInfo.name}  `} id='username'>
+                <NavDropdown title={`${userInfo.name}`} id='username'>
                   <LinkContainer to='/profile'>
                   <NavDropdown.Item>Profile</NavDropdown.Item>
                   </LinkContainer>
@@ -84,7 +85,7 @@ const Header = () => {
               </LinkContainer>
             </Nav>
           </Navbar.Collapse>{' '}
-          {toast && <CartToast />}
+          {toast && <CartToast />} */}
         </Container>
       </Navbar>
     </header>

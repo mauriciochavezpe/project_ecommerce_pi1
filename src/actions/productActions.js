@@ -26,6 +26,9 @@ import {
   PRODUCT_TOP_FAIL,
 } from '../constants/productConstants'
 
+
+const URL ="https://zpje4svosl.execute-api.us-east-1.amazonaws.com/dev/products"
+
 export const listProducts = (keyword = '', pageNumber = '') => async (
   dispatch
 ) => {
@@ -33,7 +36,7 @@ export const listProducts = (keyword = '', pageNumber = '') => async (
     dispatch({ type: PRODUCT_LIST_REQUEST })
 
     const { data } = await axios.get(
-      `/api/products?keyword=${keyword}&pagenumber=${pageNumber}`
+      `${URL}/products`
     )
 
     dispatch({
@@ -234,11 +237,11 @@ export const listTopProducts = () => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_TOP_REQUEST })
 
-    const { data } = await axios.get(`/api/products/top`)
-
+    const response = await axios(URL); // Use the relative path to your API endpoint
+    const data = await response;
     dispatch({
       type: PRODUCT_TOP_SUCCESS,
-      payload: data,
+      payload: data.data,
     })
   } catch (err) {
     dispatch({
