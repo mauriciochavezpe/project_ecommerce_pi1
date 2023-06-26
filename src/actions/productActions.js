@@ -35,13 +35,12 @@ export const listProducts = (keyword = '', pageNumber = '') => async (
   try {
     dispatch({ type: PRODUCT_LIST_REQUEST })
 
-    const { data } = await axios.get(
-      `${URL}/products`
-    )
+    const response = await axios(URL); // Use the relative path to your API endpoint
+    const data = await response;
 
     dispatch({
       type: PRODUCT_LIST_SUCCESS,
-      payload: data,
+      payload: data.data,
     })
   } catch (err) {
     dispatch({

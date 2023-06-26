@@ -7,11 +7,11 @@ import AddToCartBtn from './AddToCartBtn'
 const Product = ({ product }) => {
   return (
     <Card className='my-3 p-3 rounded card-main card-main-sm card-main-md'>
-      <Link to={`/product/${product._id}`}>
+      <Link to={`/product/${product.id}`}>
         <Card.Img src={product.image} vatiant='top' alt={product.name} />
       </Link>
       <Card.Body>
-        <Link to={`/product/${product._id}`}>
+        <Link to={`/product/${product.id}`}>
           <Card.Title as='div' className='mt-1-sm'>
             <strong>
               {product.name.length > 37
@@ -22,16 +22,16 @@ const Product = ({ product }) => {
         </Link>
         <Card.Text as='div'>
           <Rating
-            value={product.rating}
-            text={` מ-${product.numReviews} ביקורות`}
+            value={product.rating || 2}
+            text={`${product.numReviews || 3}  `}
           />
         </Card.Text>
         <Card.Text as='h5' className='mb-3'>
-          {product.price.toLocaleString('he-IL')} ש"ח{' '}
-          <small>{product.countInStock === 0 && ` (חסר במלאי)`}</small>
+          {product.price} {' '}
+          <small>{product.countInStock === 0 && `1`}</small>
         </Card.Text>
 
-        <AddToCartBtn disabled={product.countInStock === 0} id={product._id} />
+        <AddToCartBtn disabled={product.countInStock === 0} id={product.id} />
       </Card.Body>
     </Card>
   )

@@ -5,12 +5,13 @@ import { Helmet } from 'react-helmet'
 import Product from '../components/Product'
 import { listProducts } from '../actions/productActions'
 import Spinner from '../components/layout/Spinner'
-import Message from '../components/Message'
+// import Message from '../components/Message'
 import Paginate from '../components/Paginate'
 import ProductCarousel from '../components/ProductCarousel'
 
 const HomeScreen = ({ match, history }) => {
   const keyword = match.params.keyword
+  console.log(keyword);
 
   const pageNumber = match.params.pagenumber || 1
 
@@ -21,6 +22,8 @@ const HomeScreen = ({ match, history }) => {
 
   const productList = useSelector((state) => state.productList)
   const { loading, error, products, pages, page } = productList
+
+  console.log(products);
 
   useEffect(() => {
     dispatch(listProducts(keyword, pageNumber))
@@ -70,7 +73,7 @@ const HomeScreen = ({ match, history }) => {
           <Row>
             {products.length > 0 ? (
               products
-                .filter((product) => product.published)
+                // .filter((product) => product.published)
                 .map((product) => (
                   <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
                     <Product product={product} history={history} />

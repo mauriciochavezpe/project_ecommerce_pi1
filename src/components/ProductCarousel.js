@@ -13,7 +13,7 @@ const ProductCarousel = () => {
   const [loading,setLoading]= useState(null)
   const productTopRated = useSelector((state) => state.productTopRated)
   const { count, products } = productTopRated
-  console.log(products);
+  // console.log(products);
 
   useEffect(() => {
     dispatch(listTopProducts())
@@ -29,8 +29,8 @@ const ProductCarousel = () => {
   ) : (
     <Carousel pause='hover' className='bg-dark mt-2 mx-5'>
       {products.map((product) => (
-        <Carousel.Item key={product._id}>
-          <Link to={`/product/${product._id}`}>
+        <Carousel.Item key={product.id}>
+          <Link to={`/product/${product.id}`}>
             <Image src={product.image} alt={product.name} fluid rounded />
             <Carousel.Caption className='carousel-caption-sm'>
               <>

@@ -7,8 +7,7 @@ const AddToCartBtn = ({ disabled, id, qty }) => {
   const dispatch = useDispatch()
 
   const addToCartHandler = () => {
-    const message = qty > 1 ? 'הפריטים נוספו לעגלה' : 'הפריט נוסף לעגלה'
-
+    const message = qty > 1 ?  'Los artículos han sido agregados al carrito' : 'El artículo ha sido agregado al carrito';
     dispatch(addToCart(id, qty, message))
     setTimeout(() => {
       dispatch(hideToast())
@@ -22,7 +21,7 @@ const AddToCartBtn = ({ disabled, id, qty }) => {
       disabled={disabled}
       onClick={addToCartHandler}
     >
-      להוסיף לעגלה
+      Añadir a la cesta 
     </Button>
   )
 }
