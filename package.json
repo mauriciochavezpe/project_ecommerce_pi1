@@ -1,4 +1,7 @@
 {
+  "engines": {
+    "node": "^14.19.0"
+  },
   "name": "fronend",
   "proxy": "http://127.0.0.1:5000",
   "version": "0.1.0",
